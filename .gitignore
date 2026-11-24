@@ -1,0 +1,12 @@
+AncPicDb.conf
+*.pyc
+./__pycache__
+./dist
+./build
+build
+dist
+*.toc
+*.exe
+*.log
+IceDb.spec
+IceDbTest.sqlite

@@ -16,6 +16,7 @@ import mylogger as mylo
 
 from PersistClasses import Recipe, Ingredient, RecipeIngredientInter
 from EditRecipeDialog import *
+from EditIngredientsDialog import *
 
 class IceDbMain(gg.IceDBMain):
     RECIPE_DEFINS = [
@@ -301,7 +302,7 @@ class IceDbMain(gg.IceDBMain):
     
     # Handlers for AncPicDBMainFrame events.
 
-    def recipe_selected(self, event):
+    def onRecipeSelected(self, event):
             currec = GuiHelper.get_selected_fromlctrl(self.m_recipesLC, self._recipes)
             if (currec is None):
                 return
@@ -327,12 +328,17 @@ class IceDbMain(gg.IceDBMain):
         
         self.refresh_dash()
 
-    def editRecipe(self, event):
-        self.logger.info("editing a recipe")
+    def editRecipeButPressed(self, event):
         sel = GuiHelper.get_selected_fromlctrl(self.m_recipesLC, self._recipes)
         if (sel is None):
             self.logger.info("no recipe selected - editing (not) done")
             return
+        
+        return self.edit_recipe(sel)
+
+    def edit_recipe(self, sel):
+        self.logger.info("editing a recipe")
+
         dial = EditRecipeDialog(self, self._fact, sel)
         res = dial.showmodal()
         if (res!=wx.ID_OK):
@@ -344,9 +350,21 @@ class IceDbMain(gg.IceDBMain):
         self.refresh_dash()
         self.logger.info("editing a recipe done")
 
+
     def deleteRecipe(self, event):
         self.logger.info("deleting a recipe")
         self.logger.info("deleting a recipe done")
+
+    def onListDblClick(self, event):
+        selrec = GuiHelper.get_selected_fromlctrl(self.m_recipesLC, self._recipes)
+        if selrec is None:
+            return
+
+        self.edit_recipe(selrec)
+
+    def OnMenuIngredients(self, event):
+        dial = EditIngredientsDialog(self, self._fact)
+        res = dial.showmodal()
 
 
 

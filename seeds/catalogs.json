@@ -2,9 +2,11 @@
     "sqlitepersist.SQLitePersistBasicClasses.PCatalog": 
         [
             {"type": "UNITTYPE", "code":"TEASP", "value":"TSP", "langcode":"GBR"},
+            {"type": "UNITTYPE", "code":"TABSP", "value":"SP", "langcode":"GBR"},
             {"type": "UNITTYPE", "code":"GRAM", "value":"g", "langcode":"GBR"},
             {"type": "UNITTYPE", "code":"LITER", "value":"l", "langcode":"GBR"},
             {"type": "UNITTYPE", "code":"NUMBER", "value":"./.", "langcode":"GBR"},
+            {"type": "UNITTYPE", "code":"TABSP", "value":"EL", "langcode":"DEU"},
             {"type": "UNITTYPE", "code":"TEASP", "value":"TL", "langcode":"DEU"},
             {"type": "UNITTYPE", "code":"GRAM", "value":"g", "langcode":"DEU"},
             {"type": "UNITTYPE", "code":"LITER", "value":"l", "langcode":"DEU"},

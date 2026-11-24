@@ -44,8 +44,8 @@ class IceDBMain ( wx.Frame ):
         self.m_menuIngredients = wx.MenuItem( self.m_menuEdit, wx.ID_ANY, _(u"Zutaten"), wx.EmptyString, wx.ITEM_NORMAL )
         self.m_menuEdit.Append( self.m_menuIngredients )
 
-        self.m_menuRecipes = wx.MenuItem( self.m_menuEdit, wx.ID_ANY, _(u"Kataloge"), wx.EmptyString, wx.ITEM_NORMAL )
-        self.m_menuEdit.Append( self.m_menuRecipes )
+        self.m_menuCatalogues = wx.MenuItem( self.m_menuEdit, wx.ID_ANY, _(u"Kataloge"), wx.EmptyString, wx.ITEM_NORMAL )
+        self.m_menuEdit.Append( self.m_menuCatalogues )
 
         self.m_menubar1.Append( self.m_menuEdit, _(u"Bearbeiten") )
 
@@ -122,9 +122,11 @@ class IceDBMain ( wx.Frame ):
 
         # Connect Events
         self.Bind( wx.EVT_MENU, self.quit, id = self.m_menuItemExit.GetId() )
-        self.m_recipesLC.Bind( wx.EVT_LIST_ITEM_SELECTED, self.recipe_selected )
+        self.Bind( wx.EVT_MENU, self.OnMenuIngredients, id = self.m_menuIngredients.GetId() )
+        self.m_recipesLC.Bind( wx.EVT_LEFT_DCLICK, self.onListDblClick )
+        self.m_recipesLC.Bind( wx.EVT_LIST_ITEM_SELECTED, self.onRecipeSelected )
         self.m_addRecipyBU.Bind( wx.EVT_BUTTON, self.addRecipe )
-        self.m_editRecipeBU.Bind( wx.EVT_BUTTON, self.editRecipe )
+        self.m_editRecipeBU.Bind( wx.EVT_BUTTON, self.editRecipeButPressed )
         self.m_deleteRecipeBU.Bind( wx.EVT_BUTTON, self.deleteRecipe )
 
     def __del__( self ):
@@ -135,13 +137,19 @@ class IceDBMain ( wx.Frame ):
     def quit( self, event ):
         event.Skip()
 
-    def recipe_selected( self, event ):
+    def OnMenuIngredients( self, event ):
+        event.Skip()
+
+    def onListDblClick( self, event ):
+        event.Skip()
+
+    def onRecipeSelected( self, event ):
         event.Skip()
 
     def addRecipe( self, event ):
         event.Skip()
 
-    def editRecipe( self, event ):
+    def editRecipeButPressed( self, event ):
         event.Skip()
 
     def deleteRecipe( self, event ):
@@ -329,5 +337,170 @@ class gIngREecEditDialog ( wx.Dialog ):
 
     def okClicked( self, event ):
         event.Skip()
+
+
+###########################################################################
+## Class gEditIngredientsDialog
+###########################################################################
+
+class gEditIngredientsDialog ( wx.Dialog ):
+
+    def __init__( self, parent ):
+        wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = _(u"Verfügbare Zutaten bearbeiten"), pos = wx.DefaultPosition, size = wx.Size( 792,468 ), style = wx.DEFAULT_DIALOG_STYLE|wx.RESIZE_BORDER )
+
+        self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
+
+        gbSizer4 = wx.GridBagSizer( 0, 0 )
+        gbSizer4.SetFlexibleDirection( wx.BOTH )
+        gbSizer4.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+
+        self.m_ingredientsLCTRL = wx.ListCtrl( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LC_REPORT )
+        gbSizer4.Add( self.m_ingredientsLCTRL, wx.GBPosition( 0, 0 ), wx.GBSpan( 1, 1 ), wx.ALL|wx.EXPAND, 5 )
+
+        bSizer3 = wx.BoxSizer( wx.HORIZONTAL )
+
+        self.m_addRecipyBU = wx.Button( self, wx.ID_ANY, _(u"Hinzufügen"), wx.DefaultPosition, wx.DefaultSize, wx.BU_EXACTFIT|wx.BU_NOTEXT )
+
+        self.m_addRecipyBU.SetBitmap( wx.Bitmap( u"ressources/Add-Row.png", wx.BITMAP_TYPE_ANY ) )
+        bSizer3.Add( self.m_addRecipyBU, 0, 0, 5 )
+
+        self.m_editIngredientBU = wx.Button( self, wx.ID_ANY, _(u"MyButton"), wx.DefaultPosition, wx.DefaultSize, wx.BU_EXACTFIT|wx.BU_NOTEXT )
+
+        self.m_editIngredientBU.SetBitmap( wx.Bitmap( u"ressources/Edit.png", wx.BITMAP_TYPE_ANY ) )
+        bSizer3.Add( self.m_editIngredientBU, 0, 0, 5 )
+
+        self.m_deleteIngredientBU = wx.Button( self, wx.ID_ANY, _(u"MyButton"), wx.DefaultPosition, wx.DefaultSize, wx.BU_EXACTFIT|wx.BU_NOTEXT )
+
+        self.m_deleteIngredientBU.SetBitmap( wx.Bitmap( u"ressources/Delete-Row.png", wx.BITMAP_TYPE_ANY ) )
+        bSizer3.Add( self.m_deleteIngredientBU, 0, 0, 5 )
+
+
+        gbSizer4.Add( bSizer3, wx.GBPosition( 1, 0 ), wx.GBSpan( 1, 1 ), wx.ALL|wx.EXPAND, 5 )
+
+        m_sdbSizer3 = wx.StdDialogButtonSizer()
+        self.m_sdbSizer3OK = wx.Button( self, wx.ID_OK )
+        m_sdbSizer3.AddButton( self.m_sdbSizer3OK )
+        self.m_sdbSizer3Cancel = wx.Button( self, wx.ID_CANCEL )
+        m_sdbSizer3.AddButton( self.m_sdbSizer3Cancel )
+        m_sdbSizer3.Realize()
+
+        gbSizer4.Add( m_sdbSizer3, wx.GBPosition( 2, 0 ), wx.GBSpan( 1, 1 ), wx.ALL|wx.EXPAND, 5 )
+
+
+        gbSizer4.AddGrowableCol( 0 )
+        gbSizer4.AddGrowableRow( 0 )
+
+        self.SetSizer( gbSizer4 )
+        self.Layout()
+
+        self.Centre( wx.BOTH )
+
+        # Connect Events
+        self.m_ingredientsLCTRL.Bind( wx.EVT_LEFT_DCLICK, self.onIngListDblClick )
+        self.m_addRecipyBU.Bind( wx.EVT_BUTTON, self.addIngredient )
+        self.m_editIngredientBU.Bind( wx.EVT_BUTTON, self.editIngredient )
+        self.m_deleteIngredientBU.Bind( wx.EVT_BUTTON, self.deleteIngredient )
+
+    def __del__( self ):
+        pass
+
+
+    # Virtual event handlers, override them in your derived class
+    def onIngListDblClick( self, event ):
+        event.Skip()
+
+    def addIngredient( self, event ):
+        event.Skip()
+
+    def editIngredient( self, event ):
+        event.Skip()
+
+    def deleteIngredient( self, event ):
+        event.Skip()
+
+
+###########################################################################
+## Class gEditIngredientDialog
+###########################################################################
+
+class gEditIngredientDialog ( wx.Dialog ):
+
+    def __init__( self, parent ):
+        wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = _(u"Zutat Bearbeiten"), pos = wx.DefaultPosition, size = wx.Size( 295,261 ), style = wx.DEFAULT_DIALOG_STYLE|wx.RESIZE_BORDER )
+
+        self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
+
+        gbSizer5 = wx.GridBagSizer( 0, 0 )
+        gbSizer5.SetFlexibleDirection( wx.BOTH )
+        gbSizer5.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+
+        self.m_staticText7 = wx.StaticText( self, wx.ID_ANY, _(u"Name"), wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_staticText7.Wrap( -1 )
+
+        gbSizer5.Add( self.m_staticText7, wx.GBPosition( 0, 0 ), wx.GBSpan( 1, 1 ), wx.ALL, 5 )
+
+        self.m_nameTBC = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+        gbSizer5.Add( self.m_nameTBC, wx.GBPosition( 0, 1 ), wx.GBSpan( 1, 1 ), wx.ALL|wx.EXPAND, 5 )
+
+        self.m_staticText8 = wx.StaticText( self, wx.ID_ANY, _(u"Einheit"), wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_staticText8.Wrap( -1 )
+
+        gbSizer5.Add( self.m_staticText8, wx.GBPosition( 1, 0 ), wx.GBSpan( 1, 1 ), wx.ALL, 5 )
+
+        m_unitCBChoices = []
+        self.m_unitCB = wx.ComboBox( self, wx.ID_ANY, _(u"Combo!"), wx.DefaultPosition, wx.DefaultSize, m_unitCBChoices, 0 )
+        gbSizer5.Add( self.m_unitCB, wx.GBPosition( 1, 1 ), wx.GBSpan( 1, 1 ), wx.ALL|wx.EXPAND, 5 )
+
+        self.m_staticText10 = wx.StaticText( self, wx.ID_ANY, _(u"Zuckergehalt"), wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_staticText10.Wrap( -1 )
+
+        gbSizer5.Add( self.m_staticText10, wx.GBPosition( 2, 0 ), wx.GBSpan( 1, 1 ), wx.ALL, 5 )
+
+        self.m_sugarSC = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 100, 0 )
+        gbSizer5.Add( self.m_sugarSC, wx.GBPosition( 2, 1 ), wx.GBSpan( 1, 1 ), wx.ALL|wx.EXPAND, 5 )
+
+        self.m_staticText11 = wx.StaticText( self, wx.ID_ANY, _(u"Fettgehalt"), wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_staticText11.Wrap( -1 )
+
+        gbSizer5.Add( self.m_staticText11, wx.GBPosition( 3, 0 ), wx.GBSpan( 1, 1 ), wx.ALL, 5 )
+
+        self.m_fatSC = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 100, 0 )
+        gbSizer5.Add( self.m_fatSC, wx.GBPosition( 3, 1 ), wx.GBSpan( 1, 1 ), wx.ALL|wx.EXPAND, 5 )
+
+        self.m_staticText12 = wx.StaticText( self, wx.ID_ANY, _(u"Wasseranteil"), wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_staticText12.Wrap( -1 )
+
+        gbSizer5.Add( self.m_staticText12, wx.GBPosition( 4, 0 ), wx.GBSpan( 1, 1 ), wx.ALL, 5 )
+
+        self.m_waterSC = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 100, 0 )
+        gbSizer5.Add( self.m_waterSC, wx.GBPosition( 4, 1 ), wx.GBSpan( 1, 1 ), wx.ALL|wx.EXPAND, 5 )
+
+        self.m_staticText13 = wx.StaticText( self, wx.ID_ANY, _(u"Kalorien"), wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_staticText13.Wrap( -1 )
+
+        gbSizer5.Add( self.m_staticText13, wx.GBPosition( 5, 0 ), wx.GBSpan( 1, 1 ), wx.ALL, 5 )
+
+        self.m_caloriesSC = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 500, 0 )
+        gbSizer5.Add( self.m_caloriesSC, wx.GBPosition( 5, 1 ), wx.GBSpan( 1, 1 ), wx.ALL|wx.EXPAND, 5 )
+
+        m_sdbSizer4 = wx.StdDialogButtonSizer()
+        self.m_sdbSizer4OK = wx.Button( self, wx.ID_OK )
+        m_sdbSizer4.AddButton( self.m_sdbSizer4OK )
+        self.m_sdbSizer4Cancel = wx.Button( self, wx.ID_CANCEL )
+        m_sdbSizer4.AddButton( self.m_sdbSizer4Cancel )
+        m_sdbSizer4.Realize()
+
+        gbSizer5.Add( m_sdbSizer4, wx.GBPosition( 6, 0 ), wx.GBSpan( 1, 2 ), wx.ALIGN_RIGHT|wx.ALL|wx.EXPAND, 5 )
+
+
+        gbSizer5.AddGrowableCol( 1 )
+
+        self.SetSizer( gbSizer5 )
+        self.Layout()
+
+        self.Centre( wx.BOTH )
+
+    def __del__( self ):
+        pass
 
 
