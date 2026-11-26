@@ -33,6 +33,9 @@ class IceDBMain ( wx.Frame ):
         self.m_menuItemNewDb = wx.MenuItem( self.m_fileMenu, wx.ID_ANY, _(u"Neue Datenbank anlegen"), wx.EmptyString, wx.ITEM_NORMAL )
         self.m_fileMenu.Append( self.m_menuItemNewDb )
 
+        self.m_menuItem8 = wx.MenuItem( self.m_fileMenu, wx.ID_ANY, _(u"Datenbank reparieren"), wx.EmptyString, wx.ITEM_NORMAL )
+        self.m_fileMenu.Append( self.m_menuItem8 )
+
         self.m_fileMenu.AppendSeparator()
 
         self.m_menuItemExit = wx.MenuItem( self.m_fileMenu, wx.ID_ANY, _(u"Beenden")+ u"\t" + u"CTRL+Q", wx.EmptyString, wx.ITEM_NORMAL )
@@ -41,7 +44,7 @@ class IceDBMain ( wx.Frame ):
         self.m_menubar1.Append( self.m_fileMenu, _(u"Datei") )
 
         self.m_menuEdit = wx.Menu()
-        self.m_menuIngredients = wx.MenuItem( self.m_menuEdit, wx.ID_ANY, _(u"Zutaten"), wx.EmptyString, wx.ITEM_NORMAL )
+        self.m_menuIngredients = wx.MenuItem( self.m_menuEdit, wx.ID_ANY, _(u"Zutaten")+ u"\t" + u"CTRL+I", wx.EmptyString, wx.ITEM_NORMAL )
         self.m_menuEdit.Append( self.m_menuIngredients )
 
         self.m_menuCatalogues = wx.MenuItem( self.m_menuEdit, wx.ID_ANY, _(u"Kataloge"), wx.EmptyString, wx.ITEM_NORMAL )
@@ -121,6 +124,7 @@ class IceDBMain ( wx.Frame ):
         self.Centre( wx.BOTH )
 
         # Connect Events
+        self.Bind( wx.EVT_MENU, self.onRepairDB, id = self.m_menuItem8.GetId() )
         self.Bind( wx.EVT_MENU, self.quit, id = self.m_menuItemExit.GetId() )
         self.Bind( wx.EVT_MENU, self.OnMenuIngredients, id = self.m_menuIngredients.GetId() )
         self.m_recipesLC.Bind( wx.EVT_LEFT_DCLICK, self.onListDblClick )
@@ -134,6 +138,9 @@ class IceDBMain ( wx.Frame ):
 
 
     # Virtual event handlers, override them in your derived class
+    def onRepairDB( self, event ):
+        event.Skip()
+
     def quit( self, event ):
         event.Skip()
 
@@ -346,7 +353,7 @@ class gIngREecEditDialog ( wx.Dialog ):
 class gEditIngredientsDialog ( wx.Dialog ):
 
     def __init__( self, parent ):
-        wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = _(u"Verfügbare Zutaten bearbeiten"), pos = wx.DefaultPosition, size = wx.Size( 792,468 ), style = wx.DEFAULT_DIALOG_STYLE|wx.RESIZE_BORDER )
+        wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = _(u"Verfügbare Zutaten bearbeiten"), pos = wx.DefaultPosition, size = wx.Size( 819,468 ), style = wx.DEFAULT_DIALOG_STYLE|wx.RESIZE_BORDER )
 
         self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 
@@ -380,8 +387,6 @@ class gEditIngredientsDialog ( wx.Dialog ):
         m_sdbSizer3 = wx.StdDialogButtonSizer()
         self.m_sdbSizer3OK = wx.Button( self, wx.ID_OK )
         m_sdbSizer3.AddButton( self.m_sdbSizer3OK )
-        self.m_sdbSizer3Cancel = wx.Button( self, wx.ID_CANCEL )
-        m_sdbSizer3.AddButton( self.m_sdbSizer3Cancel )
         m_sdbSizer3.Realize()
 
         gbSizer4.Add( m_sdbSizer3, wx.GBPosition( 2, 0 ), wx.GBSpan( 1, 1 ), wx.ALL|wx.EXPAND, 5 )
@@ -426,7 +431,7 @@ class gEditIngredientsDialog ( wx.Dialog ):
 class gEditIngredientDialog ( wx.Dialog ):
 
     def __init__( self, parent ):
-        wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = _(u"Zutat Bearbeiten"), pos = wx.DefaultPosition, size = wx.Size( 295,261 ), style = wx.DEFAULT_DIALOG_STYLE|wx.RESIZE_BORDER )
+        wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = _(u"Zutat Bearbeiten"), pos = wx.DefaultPosition, size = wx.Size( 294,280 ), style = wx.DEFAULT_DIALOG_STYLE|wx.RESIZE_BORDER )
 
         self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 
@@ -456,32 +461,36 @@ class gEditIngredientDialog ( wx.Dialog ):
 
         gbSizer5.Add( self.m_staticText10, wx.GBPosition( 2, 0 ), wx.GBSpan( 1, 1 ), wx.ALL, 5 )
 
-        self.m_sugarSC = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 100, 0 )
-        gbSizer5.Add( self.m_sugarSC, wx.GBPosition( 2, 1 ), wx.GBSpan( 1, 1 ), wx.ALL|wx.EXPAND, 5 )
+        self.m_sugarSCD = wx.SpinCtrlDouble( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 1, 0.000000, 1 )
+        self.m_sugarSCD.SetDigits( 2 )
+        gbSizer5.Add( self.m_sugarSCD, wx.GBPosition( 2, 1 ), wx.GBSpan( 1, 1 ), wx.ALL|wx.EXPAND, 5 )
 
         self.m_staticText11 = wx.StaticText( self, wx.ID_ANY, _(u"Fettgehalt"), wx.DefaultPosition, wx.DefaultSize, 0 )
         self.m_staticText11.Wrap( -1 )
 
         gbSizer5.Add( self.m_staticText11, wx.GBPosition( 3, 0 ), wx.GBSpan( 1, 1 ), wx.ALL, 5 )
 
-        self.m_fatSC = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 100, 0 )
-        gbSizer5.Add( self.m_fatSC, wx.GBPosition( 3, 1 ), wx.GBSpan( 1, 1 ), wx.ALL|wx.EXPAND, 5 )
+        self.m_fatSCD = wx.SpinCtrlDouble( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 1, 0, 1 )
+        self.m_fatSCD.SetDigits( 2 )
+        gbSizer5.Add( self.m_fatSCD, wx.GBPosition( 3, 1 ), wx.GBSpan( 1, 1 ), wx.ALL|wx.EXPAND, 5 )
 
         self.m_staticText12 = wx.StaticText( self, wx.ID_ANY, _(u"Wasseranteil"), wx.DefaultPosition, wx.DefaultSize, 0 )
         self.m_staticText12.Wrap( -1 )
 
         gbSizer5.Add( self.m_staticText12, wx.GBPosition( 4, 0 ), wx.GBSpan( 1, 1 ), wx.ALL, 5 )
 
-        self.m_waterSC = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 100, 0 )
-        gbSizer5.Add( self.m_waterSC, wx.GBPosition( 4, 1 ), wx.GBSpan( 1, 1 ), wx.ALL|wx.EXPAND, 5 )
+        self.m_waterSCD = wx.SpinCtrlDouble( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 1, 0, 1 )
+        self.m_waterSCD.SetDigits( 2 )
+        gbSizer5.Add( self.m_waterSCD, wx.GBPosition( 4, 1 ), wx.GBSpan( 1, 1 ), wx.ALL|wx.EXPAND, 5 )
 
-        self.m_staticText13 = wx.StaticText( self, wx.ID_ANY, _(u"Kalorien"), wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_staticText13 = wx.StaticText( self, wx.ID_ANY, _(u"Kalorien/Einheit"), wx.DefaultPosition, wx.DefaultSize, 0 )
         self.m_staticText13.Wrap( -1 )
 
         gbSizer5.Add( self.m_staticText13, wx.GBPosition( 5, 0 ), wx.GBSpan( 1, 1 ), wx.ALL, 5 )
 
-        self.m_caloriesSC = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 500, 0 )
-        gbSizer5.Add( self.m_caloriesSC, wx.GBPosition( 5, 1 ), wx.GBSpan( 1, 1 ), wx.ALL|wx.EXPAND, 5 )
+        self.m_caloriesSCD = wx.SpinCtrlDouble( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 1000, 2.000000, 1 )
+        self.m_caloriesSCD.SetDigits( 3 )
+        gbSizer5.Add( self.m_caloriesSCD, wx.GBPosition( 5, 1 ), wx.GBSpan( 1, 1 ), wx.ALL|wx.EXPAND, 5 )
 
         m_sdbSizer4 = wx.StdDialogButtonSizer()
         self.m_sdbSizer4OK = wx.Button( self, wx.ID_OK )
@@ -494,6 +503,7 @@ class gEditIngredientDialog ( wx.Dialog ):
 
 
         gbSizer5.AddGrowableCol( 1 )
+        gbSizer5.AddGrowableRow( 6 )
 
         self.SetSizer( gbSizer5 )
         self.Layout()

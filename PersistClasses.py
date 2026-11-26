@@ -18,14 +18,17 @@ class Ingredient(sqp.PBase):
 
      def __str__(self):
           return self.name
-     
-class RecipeIngredientInter(sqp.PBase):
+
+
+class BasicRecipeIngredientInter(sqp.PBase):
+     _collectionname = "RecipeIngredientInter"
      RecipeId = sqp.UUid(uniquegrp="repipeingredunique")
      IngredientId = sqp.UUid(uniquegrp="repipeingredunique")
      Amount = sqp.Int()
-     Ingredient = sqp.JoinedEmbeddedObject(targettype=Ingredient, localid=IngredientId, autofill=True)
+class RecipeIngredientInter(BasicRecipeIngredientInter):
+     Ingredient = sqp.JoinedEmbeddedObject(targettype=Ingredient, localid=BasicRecipeIngredientInter.IngredientId, autofill=True)
 
-    
+
 class Recipe(sqp.PBase):
      Id = sqp.UUid()
      Title = sqp.String()

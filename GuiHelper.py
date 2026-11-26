@@ -460,6 +460,27 @@ class GuiHelper:
             ct += 1
 
     @classmethod
+    def select_item_in_lstctrl(cls, ctrl : wx.ListCtrl, items : list, selitem):
+        assert(selitem is not None)
+        assert(items is not None and len(items)>0)
+
+        selitem_type = type(selitem)
+        items_type = type(items[0])
+        if issubclass(items_type, sqp.PBase) and issubclass(selitem_type, sqp.PBase):
+            selidx = -1
+            idx = 0
+            for idx in range(len(items)):
+                if items[idx]._id == selitem._id:
+                    selidx = idx
+                    break
+
+            if selidx >= 0:
+                ctrl.Select(selidx)
+        else:
+            raise Exception("Data type of items or seleitem not yet supported")
+            
+
+    @classmethod
     def select_dir(cls, parent, title: str, defaultDir=wx.EmptyString):
         """open a modal directory selection dialog"""
         dd = wx.DirDialog(parent, title, defaultDir)

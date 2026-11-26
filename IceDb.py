@@ -14,7 +14,7 @@ from GuiHelper import GuiHelper
 from ABDBTools import APDBTools
 import mylogger as mylo
 
-from PersistClasses import Recipe, Ingredient, RecipeIngredientInter
+from PersistClasses import Recipe, Ingredient, BasicRecipeIngredientInter, RecipeIngredientInter
 from EditRecipeDialog import *
 from EditIngredientsDialog import *
 
@@ -365,6 +365,27 @@ class IceDbMain(gg.IceDBMain):
     def OnMenuIngredients(self, event):
         dial = EditIngredientsDialog(self, self._fact)
         res = dial.showmodal()
+
+    def onRepairDB(self, event):
+        """Try to repair the database
+        """
+
+        #open Recipe/Ingredient intersections
+        inters = list(sqp.SQQuery(self._fact, BasicRecipeIngredientInter))
+        delinters = []
+        for inter in inters:
+            recipe = sqp.SQQuery(self._fact, Recipe).where(Recipe.Id==inter.recipeid).first_or_default(None)
+            if recipe is None:
+                delinters.append(inter)
+                continue
+            ingred = sqp.SQQuery(self._fact, Ingredient).where(Ingredient.Id==inter.ingredientid).first_or_default(None)
+            if ingred is None:
+                delinters.append(inter)
+
+        res = GuiHelper.ask_user(self, "Es werden {} Verknüpfungen von Rezept zur Zutat gelöscht. OK?".format(len(delinters)))
+        if res == wx.ID_YES:
+            for delinter in delinters:
+                self._fact.delete(delinter)
 
 
 
