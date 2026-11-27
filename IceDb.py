@@ -242,6 +242,11 @@ class IceDbMain(gg.IceDBMain):
         self.m_recipesLC.DeleteAllItems()
 
         GuiHelper.set_data_for_lstctrl(self.m_recipesLC, self.RECIPE_DEFINS, self._recipes)
+        if prevsel is not None:
+            GuiHelper.select_item_in_lstctrl(self.m_recipesLC, self._recipes, prevsel)
+            self._show_recipe(prevsel)
+        else:
+            self.m_recipeRT.Clear()
 
         self.m_mainWindowSB.SetStatusText("Rezepte: {0}".format(len(self._recipes)), 0)
 
@@ -303,11 +308,11 @@ class IceDbMain(gg.IceDBMain):
     # Handlers for AncPicDBMainFrame events.
 
     def onRecipeSelected(self, event):
-            currec = GuiHelper.get_selected_fromlctrl(self.m_recipesLC, self._recipes)
-            if (currec is None):
-                return
-    
-            self._show_recipe(currec)
+        currec = GuiHelper.get_selected_fromlctrl(self.m_recipesLC, self._recipes)
+        if (currec is None):
+            return
+
+        self._show_recipe(currec)
     
     def quit( self, event ):
         """The user selected the menu item "close AncPicDb" """
@@ -319,12 +324,14 @@ class IceDbMain(gg.IceDBMain):
         self.logger.info("adding recipe")
         newreci = Recipe()
         newreci.title = "<Neues Rezept>"
+        self._fact.flush(newreci) #we need an id to enable connection of ingredients in intersection: recipe/ingredients
         recidial = EditRecipeDialog(self, self._fact, newreci)
         res = recidial.showmodal()
-        if res != wx.ID_OK:
-            return
-        
         newp = recidial.flushnget()
+
+        if res != wx.ID_OK:
+            self._fact.delete(newp) #eventually added intersection entries are also deleted here - cascading delete
+            return
         
         self.refresh_dash()
 
@@ -347,13 +354,18 @@ class IceDbMain(gg.IceDBMain):
         self.logger.info("edit of recipe {} done, saving to database now", sel._id)
         newreci = dial.flushnget()
 
-        self.refresh_dash()
+        self.refresh_dash(newreci)
         self.logger.info("editing a recipe done")
 
 
     def deleteRecipe(self, event):
-        self.logger.info("deleting a recipe")
-        self.logger.info("deleting a recipe done")
+        rec = GuiHelper.get_selected_fromlctrl(self.m_recipesLC, self._recipes)
+        if rec is None:
+            return
+        res = GuiHelper.ask_user(self, "Soll das Rezept '{}' wirklich gelöscht werden?".format(rec.title))
+        if res==wx.ID_YES:
+            self._fact.delete(rec)
+            self.refresh_dash()
 
     def onListDblClick(self, event):
         selrec = GuiHelper.get_selected_fromlctrl(self.m_recipesLC, self._recipes)
@@ -374,18 +386,28 @@ class IceDbMain(gg.IceDBMain):
         inters = list(sqp.SQQuery(self._fact, BasicRecipeIngredientInter))
         delinters = []
         for inter in inters:
-            recipe = sqp.SQQuery(self._fact, Recipe).where(Recipe.Id==inter.recipeid).first_or_default(None)
+            if inter.recipeid is not None:
+                recipe = sqp.SQQuery(self._fact, Recipe).where(Recipe.Id==inter.recipeid).first_or_default(None)
+            else:
+                recipe = None
+
             if recipe is None:
                 delinters.append(inter)
                 continue
-            ingred = sqp.SQQuery(self._fact, Ingredient).where(Ingredient.Id==inter.ingredientid).first_or_default(None)
+
+            if inter.ingredientid is not None:
+                ingred = sqp.SQQuery(self._fact, Ingredient).where(Ingredient.Id==inter.ingredientid).first_or_default(None)
+            else:
+                ingred = None
+
             if ingred is None:
                 delinters.append(inter)
 
-        res = GuiHelper.ask_user(self, "Es werden {} Verknüpfungen von Rezept zur Zutat gelöscht. OK?".format(len(delinters)))
-        if res == wx.ID_YES:
-            for delinter in delinters:
-                self._fact.delete(delinter)
+        if len(delinters) > 0:
+            res = GuiHelper.ask_user(self, "Es werden {} Verknüpfungen von Rezept zur Zutat gelöscht. OK?".format(len(delinters)))
+            if res == wx.ID_YES:
+                for delinter in delinters:
+                    self._fact.delete(delinter)
 
 
 

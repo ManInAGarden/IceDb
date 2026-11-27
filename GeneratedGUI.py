@@ -353,7 +353,7 @@ class gIngREecEditDialog ( wx.Dialog ):
 class gEditIngredientsDialog ( wx.Dialog ):
 
     def __init__( self, parent ):
-        wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = _(u"Verfügbare Zutaten bearbeiten"), pos = wx.DefaultPosition, size = wx.Size( 819,468 ), style = wx.DEFAULT_DIALOG_STYLE|wx.RESIZE_BORDER )
+        wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = _(u"Verfügbare Zutaten bearbeiten"), pos = wx.DefaultPosition, size = wx.Size( 938,460 ), style = wx.DEFAULT_DIALOG_STYLE|wx.RESIZE_BORDER )
 
         self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 
@@ -431,7 +431,7 @@ class gEditIngredientsDialog ( wx.Dialog ):
 class gEditIngredientDialog ( wx.Dialog ):
 
     def __init__( self, parent ):
-        wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = _(u"Zutat Bearbeiten"), pos = wx.DefaultPosition, size = wx.Size( 294,280 ), style = wx.DEFAULT_DIALOG_STYLE|wx.RESIZE_BORDER )
+        wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = _(u"Zutat Bearbeiten"), pos = wx.DefaultPosition, size = wx.Size( 330,334 ), style = wx.DEFAULT_DIALOG_STYLE|wx.RESIZE_BORDER )
 
         self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 
@@ -492,6 +492,23 @@ class gEditIngredientDialog ( wx.Dialog ):
         self.m_caloriesSCD.SetDigits( 3 )
         gbSizer5.Add( self.m_caloriesSCD, wx.GBPosition( 5, 1 ), wx.GBSpan( 1, 1 ), wx.ALL|wx.EXPAND, 5 )
 
+        self.m_staticText131 = wx.StaticText( self, wx.ID_ANY, _(u"Einheitsgewicht/g"), wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_staticText131.Wrap( -1 )
+
+        gbSizer5.Add( self.m_staticText131, wx.GBPosition( 6, 0 ), wx.GBSpan( 1, 1 ), wx.ALL, 5 )
+
+        self.m_unitweightSDC = wx.SpinCtrlDouble( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 1000, 0, 1 )
+        self.m_unitweightSDC.SetDigits( 1 )
+        gbSizer5.Add( self.m_unitweightSDC, wx.GBPosition( 6, 1 ), wx.GBSpan( 1, 1 ), wx.ALL|wx.EXPAND, 5 )
+
+        self.m_staticText14 = wx.StaticText( self, wx.ID_ANY, _(u"Aktiv"), wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_staticText14.Wrap( -1 )
+
+        gbSizer5.Add( self.m_staticText14, wx.GBPosition( 7, 0 ), wx.GBSpan( 1, 1 ), wx.ALL, 5 )
+
+        self.m_activeCB = wx.CheckBox( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.CHK_2STATE )
+        gbSizer5.Add( self.m_activeCB, wx.GBPosition( 7, 1 ), wx.GBSpan( 1, 1 ), wx.ALL, 5 )
+
         m_sdbSizer4 = wx.StdDialogButtonSizer()
         self.m_sdbSizer4OK = wx.Button( self, wx.ID_OK )
         m_sdbSizer4.AddButton( self.m_sdbSizer4OK )
@@ -499,11 +516,11 @@ class gEditIngredientDialog ( wx.Dialog ):
         m_sdbSizer4.AddButton( self.m_sdbSizer4Cancel )
         m_sdbSizer4.Realize()
 
-        gbSizer5.Add( m_sdbSizer4, wx.GBPosition( 6, 0 ), wx.GBSpan( 1, 2 ), wx.ALIGN_RIGHT|wx.ALL|wx.EXPAND, 5 )
+        gbSizer5.Add( m_sdbSizer4, wx.GBPosition( 8, 0 ), wx.GBSpan( 1, 2 ), wx.ALIGN_RIGHT|wx.ALL|wx.EXPAND, 5 )
 
 
         gbSizer5.AddGrowableCol( 1 )
-        gbSizer5.AddGrowableRow( 6 )
+        gbSizer5.AddGrowableRow( 8 )
 
         self.SetSizer( gbSizer5 )
         self.Layout()

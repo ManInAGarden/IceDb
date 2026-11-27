@@ -11,6 +11,7 @@ class EditIngredientsDialog(gg.gEditIngredientsDialog):
                 {"propname":"sugar", "title":"Zuckeranteil"},
                 {"propname":"water", "title":"Wasseranteil"},
                 {"propname":"calories", "title":"Kalorien"},
+                {"propname":"unitweight", "title":"Einheitsgewicht/g"},
                 {"propname":"active", "title":"Aktiv"}
             ]
     @property 

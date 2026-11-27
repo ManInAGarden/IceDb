@@ -1,15 +1,17 @@
 { 
     "PersistClasses.Ingredient": 
         [
-            {"name": "Wasser", "unit": "GRAM", "water":1.0, "fat":0.0, "sugar":0.0, "calories":0.0},
-            {"name": "Eigelb M", "unit": "NUMBER", "water":13.5, "fat":8.613, "sugar":0.081, "calories":93.96},
-            {"name": "Sahne (30%)", "unit": "GRAM", "water":0.64, "fat":0.3, "sugar":0.032, "calories":2.88},
-            {"name": "Zucker", "unit": "GRAM", "water":0.0, "fat":0.0, "sugar":1.0, "calories":4.05},
-            {"name": "Vanillearoma", "unit": "TEASP", "water":1.0, "fat":0.0, "sugar":0.0, "calories":0.0},
-            {"name": "Pistazienmus", "unit": "TABSP", "water":0.02, "fat":0.48, "sugar":0.059, "calories":92.25},
-            {"name": "Haselnussmus", "unit": "TABSP", "water":0.04, "fat":0.67, "sugar":0.05, "calories":100.65},
-            {"name": "Kakaopulver (stark entölt)", "unit": "GRAM", "water":0.05, "fat":0.12, "sugar":0.0, "calories":0.286},
-            {"name": "Trockenglucose", "unit": "GRAM", "water":0.0, "fat":0.0, "sugar":0.95, "calories":0.386},
-            {"name": "Vollmilch (3,5%)", "unit": "GRAM", "water":0.87, "fat":0.035, "sugar":0.048, "calories":0.64}
+            {"name": "Wasser", "unit": "GRAM", "water":1.0, "fat":0.0, "sugar":0.0, "calories":0.0, "unitweight": 1.0},
+            {"name": "Eigelb M", "unit": "NUMBER", "water":0.5, "fat":0.319, "sugar":0.081, "calories":81.19, "unitweight": 23.0},
+            {"name": "Eiklar M", "unit": "NUMBER", "water":0.873, "fat":0.0, "sugar":0.007, "calories":93.96, "unitweight": 34.5},
+            {"name": "Ei M", "unit": "NUMBER", "water": 0.744, "fat":0.113, "sugar":0.007, "calories":121.0, "unitweight": 78.0},
+            {"name": "Sahne (30%)", "unit": "GRAM", "water":0.64, "fat":0.3, "sugar":0.032, "calories":2.88, "unitweight": 1.0},
+            {"name": "Zucker", "unit": "GRAM", "water":0.0, "fat":0.0, "sugar":1.0, "calories":4.05, "unitweight": 1.0},
+            {"name": "Vanillearoma", "unit": "TEASP", "water":1.0, "fat":0.0, "sugar":0.0, "calories":0.0, "unitweight": 5.0},
+            {"name": "Pistazienmus", "unit": "TABSP", "water":0.02, "fat":0.48, "sugar":0.059, "calories":92.25, "unitweight": 15.0},
+            {"name": "Haselnussmus", "unit": "TABSP", "water":0.04, "fat":0.67, "sugar":0.05, "calories":100.65, "unitweight": 15.0},
+            {"name": "Kakaopulver (stark entölt)", "unit": "GRAM", "water":0.05, "fat":0.12, "sugar":0.0, "calories":0.286, "unitweight": 1.0},
+            {"name": "Trockenglucose", "unit": "GRAM", "water":0.0, "fat":0.0, "sugar":0.95, "calories":0.386, "unitweight": 1.0},
+            {"name": "Vollmilch (3,5%)", "unit": "GRAM", "water":0.87, "fat":0.035, "sugar":0.048, "calories":0.64, "unitweight": 1.0}
         ]
     }

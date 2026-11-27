@@ -14,6 +14,7 @@ class Ingredient(sqp.PBase):
      Water = sqp.Float()
      Sugar = sqp.Float()
      Calories = sqp.Float()
+     UnitWeight = sqp.Float()
      Active = sqp.Boolean(default=True)
 
      def __str__(self):
@@ -34,7 +35,7 @@ class Recipe(sqp.PBase):
      Title = sqp.String()
      Description = sqp.String()
      CookingDescription = sqp.String()
-     Ingredients = sqp.IntersectedList(targettype=RecipeIngredientInter, interupid="recipeid", interdownid="ingredientid", cascadedelete=False)
+     Ingredients = sqp.IntersectedList(targettype=RecipeIngredientInter, interupid="recipeid", interdownid="ingredientid", cascadedelete=True)
 
      def as_string(self):
           return "{}".format(self.title)

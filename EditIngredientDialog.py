@@ -37,6 +37,9 @@ class EditIngredientDialog(gg.gEditIngredientDialog):
         GuiHelper.set_val(self.m_sugarSCD, ing.sugar)
         GuiHelper.set_val(self.m_waterSCD, ing.water)
         GuiHelper.set_val(self.m_caloriesSCD, ing.calories)
+        GuiHelper.set_val(self.m_unitweightSDC, ing.unitweight)
+        GuiHelper.set_val(self.m_activeCB, ing.active)
+
 
     def flushnget(self):
         ing = self._ingredient
@@ -46,6 +49,8 @@ class EditIngredientDialog(gg.gEditIngredientDialog):
         ing.sugar = GuiHelper.get_val(self.m_sugarSCD)
         ing.water = GuiHelper.get_val(self.m_waterSCD)
         ing.calories = GuiHelper.get_val(self.m_caloriesSCD)
+        ing.unitweight = GuiHelper.get_val(self.m_unitweightSDC)
+        ing.active = GuiHelper.get_val(self.m_activeCB)
         
         self._fact.flush(ing)
 
